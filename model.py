@@ -23,13 +23,17 @@ THE SOFTWARE.
 import torch
 import torch.nn as nn
 import numpy as np
+import pywt
 
 
 def get_wav(in_channels, pool=True):
     """wavelet decomposition using conv2d"""
-    harr_wav_L = 1 / np.sqrt(2) * np.ones((1, 2))
-    harr_wav_H = 1 / np.sqrt(2) * np.ones((1, 2))
-    harr_wav_H[0, 0] = -1 * harr_wav_H[0, 0]
+    wavelet = pywt.Wavelet('haar')
+    #harr_wav_L = 1 / np.sqrt(2) * np.ones((1, 2))
+    #harr_wav_H = 1 / np.sqrt(2) * np.ones((1, 2))
+    harr_wav_L = np.array(wavelet.inverse_filter_bank[0])
+    harr_wav_H = np.array(wavelet.inverse_filter_bank[1])
+    #harr_wav_H[0, 0] = -1 * harr_wav_H[0, 0]
 
     harr_wav_LL = np.transpose(harr_wav_L) * harr_wav_L
     harr_wav_LH = np.transpose(harr_wav_L) * harr_wav_H
